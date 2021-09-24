@@ -1,0 +1,14 @@
+C:\Users\Student\source\repos\cribbage2021\cribbage2021\obj\Debug\netcoreapp3.1\cribbage2021.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Student\source\repos\cribbage2021\cribbage2021\obj\Debug\netcoreapp3.1\cribbage2021.AssemblyInfoInputs.cache
+C:\Users\Student\source\repos\cribbage2021\cribbage2021\obj\Debug\netcoreapp3.1\cribbage2021.AssemblyInfo.cs
+C:\Users\Student\source\repos\cribbage2021\cribbage2021\obj\Debug\netcoreapp3.1\cribbage2021.csproj.CoreCompileInputs.cache
+C:\Users\Student\source\repos\cribbage2021\cribbage2021\bin\Debug\netcoreapp3.1\cribbage2021.exe
+C:\Users\Student\source\repos\cribbage2021\cribbage2021\bin\Debug\netcoreapp3.1\cribbage2021.deps.json
+C:\Users\Student\source\repos\cribbage2021\cribbage2021\bin\Debug\netcoreapp3.1\cribbage2021.runtimeconfig.json
+C:\Users\Student\source\repos\cribbage2021\cribbage2021\bin\Debug\netcoreapp3.1\cribbage2021.runtimeconfig.dev.json
+C:\Users\Student\source\repos\cribbage2021\cribbage2021\bin\Debug\netcoreapp3.1\cribbage2021.dll
+C:\Users\Student\source\repos\cribbage2021\cribbage2021\bin\Debug\netcoreapp3.1\cribbage2021.pdb
+C:\Users\Student\source\repos\cribbage2021\cribbage2021\obj\Debug\netcoreapp3.1\cribbage2021.dll
+C:\Users\Student\source\repos\cribbage2021\cribbage2021\obj\Debug\netcoreapp3.1\cribbage2021.pdb
+C:\Users\Student\source\repos\cribbage2021\cribbage2021\obj\Debug\netcoreapp3.1\cribbage2021.genruntimeconfig.cache
+C:\Users\Student\source\repos\cribbage2021\cribbage2021\obj\Debug\netcoreapp3.1\cribbage2021.csproj.AssemblyReference.cache
