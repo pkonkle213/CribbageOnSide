@@ -1,5 +1,7 @@
-﻿using System;
+﻿using cribbage2021.Classes;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace cribbage2021
 {
@@ -8,12 +10,68 @@ namespace cribbage2021
         static void Main(string[] args)
         {
             //Creating a deck of cards
-            List<decimal> fullDeck = new List<decimal>();
-            for (decimal cardValue = 1.0M; cardValue <= 13; cardValue++)
+            //To do this with classes, We could for() loop the numbers and the suits again, but not include decimal spots
+
+            /*
+             * Methods I need:
+             * -Shuffling the deck
+             * -Printing the deck on the screen
+             * -Allowing the user to choose cards to discard
+             * -Checking for Heels
+             * -Counting 15s (Must be able to calculate based upon 4 or 5 cards for normal hands, normal cribs, and the last hand.
+             * -Counting Pairs
+             * -Counting Runs
+             * -Counting Flush(es)
+             * -Checking for Nobs
+             * -Returning to the beginning of the process if the deck still has 5 or more cards
+             */
+
+            List<Card> fullDeck = new List<Card>();
+            string name = "";
+            string suit = "";
+            for (int cardValue = 1; cardValue <= 13; cardValue++)
             {
-                for (decimal cardSuit = 1.0M; cardSuit <= 4; cardSuit++)
+                for (int cardSuit = 1; cardSuit <= 4; cardSuit++)
                 {
-                    fullDeck.Add(cardValue + cardSuit / 10.0M);
+                    if (cardValue == 1)
+                    {
+                        name = "Ace";
+                    }
+                    else if (cardValue == 11)
+                    {
+                        name = "Jack";
+                    }
+                    else if (cardValue == 12)
+                    {
+                        name = "Queen";
+                    }
+                    else if (cardValue == 13)
+                    {
+                        name = "King";
+                    }
+                    else
+                    {
+                        name = cardValue.ToString();
+                    }
+
+                    if (cardSuit == 1)
+                    {
+                        suit = "Clubs";
+                    }
+                    else if (cardSuit == 2)
+                    {
+                        suit = "Diamonds";
+                    }
+                    else if (cardSuit == 3)
+                    {
+                        suit = "Hearts";
+                    }
+                    else
+                    {
+                        suit = "Spades";
+                    }
+
+                    fullDeck.Add(new Card(name, suit, cardValue));
                 }
             }
 
@@ -27,7 +85,7 @@ namespace cribbage2021
             {
                 int cardAIndex = rnd.Next(fullDeck.Count);
                 int cardBIndex = rnd.Next(fullDeck.Count);
-            // Console.WriteLine(shufIndex + ": " + cardAIndex + " & " + cardBIndex);
+                // Console.WriteLine(shufIndex + ": " + cardAIndex + " & " + cardBIndex);
 
                 while (cardAIndex == cardBIndex)  // Testing to make sure that the selected cards aren't the same card
                 {
@@ -35,14 +93,14 @@ namespace cribbage2021
                     cardBIndex = rnd.Next(fullDeck.Count);
                 }
 
-                decimal storage;
+                Card storage;
                 storage = fullDeck[cardAIndex];
                 fullDeck[cardAIndex] = fullDeck[cardBIndex];
                 fullDeck[cardBIndex] = storage;
             }
 
             //Deal 3 cards to hand, 2 to crib, then 3 to hand
-            List<decimal> hand = new List<decimal> {
+            List<Card> hand = new List<Card> {
                 fullDeck[0],
                 fullDeck[1],
                 fullDeck[2],
@@ -51,7 +109,7 @@ namespace cribbage2021
                 fullDeck[7]
             };
 
-            List<decimal> crib = new List<decimal>
+            List<Card> crib = new List<Card>
             {
                 fullDeck[3],
                 fullDeck[4]
@@ -60,62 +118,33 @@ namespace cribbage2021
             //Remove the cards from the deck
             fullDeck.RemoveRange(0, 8);
 
-            //Sort the hand
-            hand.Sort();
+            // Sort the hand, thank you google!
+            hand = hand.OrderBy(x => x.NumberValue)
+                       .ThenBy(x => x.SuitOfCard)
+                       .ToList();
 
             //Reveal what's in the hand
             Console.WriteLine("1        2        3        4        5        6");
             Console.WriteLine("-        -        -        -        -        -");
 
             //Writing the values
-            foreach (int cardHand in hand)
+            foreach (Card cardHand in hand)
             {
-                if (cardHand / 1 == 1)
+                Console.Write(cardHand.NameOfCard);
+                for (int i = 0; i < 9 - cardHand.NameOfCard.Length; i++)
                 {
-                    Console.Write("Ace      ");
-                }
-                else if (cardHand / 1 == 10)
-                {
-                    Console.Write("10       ");
-                }
-                else if (cardHand / 1 == 11)
-                {
-                    Console.Write("Jack     ");
-                }
-                else if (cardHand / 1 == 12)
-                {
-                    Console.Write("Queen    ");
-                }
-                else if (cardHand == 13)
-                {
-                    Console.Write("King     ");
-                }
-                else
-                {
-                    Console.Write(cardHand + "        ");
+                    Console.Write(" ");
                 }
             }
             Console.WriteLine();
-
+            
             //Writing the suits
-            foreach (decimal suit in hand)
+            foreach (Card cardHand in hand)
             {
-                double suitHand = (double)((suit % 1) * 10);
-                if (suitHand == 1)
+                Console.Write(cardHand.SuitOfCard);
+                for (int i = 0; i < 9 - cardHand.SuitOfCard.Length; i++)
                 {
-                    Console.Write("Clubs    ");
-                }
-                else if (suitHand == 2)
-                {
-                    Console.Write("Diamonds ");
-                }
-                else if (suitHand == 3)
-                {
-                    Console.Write("Hearts   ");
-                }
-                else
-                {
-                    Console.Write("Spades   ");
+                    Console.Write(" ");
                 }
             }
 
@@ -133,124 +162,79 @@ namespace cribbage2021
 
             crib.Add(hand[discardOne - 1]);
             crib.Add(hand[discardTwo - 1]);
-            decimal rHand1 = hand[discardOne - 1];
-            decimal rHand2 = hand[discardTwo - 1];
+            Card rHand1 = hand[discardOne - 1];
+            Card rHand2 = hand[discardTwo - 1];
             hand.Remove(rHand1);
             hand.Remove(rHand2);
 
-            crib.Sort();
+            crib = crib.OrderBy(x => x.NumberValue)
+                       .ThenBy(x => x.SuitOfCard)
+                       .ToList();
 
             // Randomly select Starter card
             int starterIndex = rnd.Next(fullDeck.Count);
             hand.Add(fullDeck[starterIndex]);
             crib.Add(fullDeck[starterIndex]);
-
-            //Rewrite the hand
-            /*
-            // For testing purposes, setting the hand to specific values
-            hand[0] = 6.3M;
-            hand[1] = 7.1M;
-            hand[2] = 7.3M;
-            hand[3] = 8.2M;
-            hand[4] = 8.4M;
-            hand.RemoveRange(5, 1);
             //End test
-            */
+            
 
             Console.Clear();
             Console.WriteLine("1        2        3        4        Starter");
             Console.WriteLine("-        -        -        -        -------");
-            foreach (int cardHand in hand)
+            foreach (Card cardHand in hand)
             {
-                if (cardHand / 1 == 1)
+                Console.Write(cardHand.NameOfCard);
+                for (int i = 0; i < 9 - cardHand.NameOfCard.Length; i++)
                 {
-                    Console.Write("Ace      ");
-                }
-                else if (cardHand / 1 == 10)
-                {
-                    Console.Write("10       ");
-                }
-                else if (cardHand / 1 == 11)
-                {
-                    Console.Write("Jack     ");
-                }
-                else if (cardHand / 1 == 12)
-                {
-                    Console.Write("Queen    ");
-                }
-                else if (cardHand == 13)
-                {
-                    Console.Write("King     ");
-                }
-                else
-                {
-                    Console.Write(cardHand + "        ");
+                    Console.Write(" ");
                 }
             }
             Console.WriteLine();
 
+
             //Writing the suits
-            foreach (decimal suit in hand)
+            foreach (Card cardHand in hand)
             {
-                int suitHand = (int)((suit % 1.0M) * 10);
-                if (suitHand == 1)
+                Console.Write(cardHand.SuitOfCard);
+                for (int i = 0; i < 9 - cardHand.SuitOfCard.Length; i++)
                 {
-                    Console.Write("Clubs    ");
-                }
-                else if (suitHand == 2)
-                {
-                    Console.Write("Diamonds ");
-                }
-                else if (suitHand == 3)
-                {
-                    Console.Write("Hearts   ");
-                }
-                else
-                {
-                    Console.Write("Spades   ");
+                    Console.Write(" ");
                 }
             }
 
-            hand.Sort();
+            //Resorting to include the starter
+            hand = hand.OrderBy(x => x.NumberValue)
+                      .ThenBy(x => x.SuitOfCard)
+                      .ToList();
+
             int tempPoints = 0;
             // Step 0: Check for heels (starter being a jack)
-            if (fullDeck[starterIndex] / 1 == 11)
+            if (fullDeck[starterIndex].NameOfCard == "Jack")
             {
                 tempPoints += 2;
                 Console.WriteLine("Heels for " + tempPoints);
             }
             // Count the points in hand
-
-            List<int> handNumValue = new List<int>();
-            foreach (int card in hand)
-            {
-                if (card / 1 >= 10)
-                {
-                    handNumValue.Add(10);
-                }
-                else
-                {
-                    handNumValue.Add(card / 1);
-                }
-            }
-
+            
             // Adding an empty value for the card not being applicable
-            handNumValue.Add(0);
+            hand.Add(new Card("None","None",0));
 
             Console.WriteLine();
             
             //Step 1: Count the 15s
-            for(int handCardA = 0; handCardA < handNumValue.Count; handCardA += 5)
+            //For each permutation of cards adds to 15 (face cards = 10), the player scores 2 points
+
+            for(int handCardA = 0; handCardA < hand.Count; handCardA += 5)
             {
-                for(int handCardB = 1; handCardB < handNumValue.Count; handCardB += 4)
+                for(int handCardB = 1; handCardB < hand.Count; handCardB += 4)
                 {
-                    for(int handCardC = 2; handCardC < handNumValue.Count; handCardC += 3)
+                    for(int handCardC = 2; handCardC < hand.Count; handCardC += 3)
                     {
-                        for(int handCardD=3; handCardD < handNumValue.Count; handCardD += 2)
+                        for(int handCardD=3; handCardD < hand.Count; handCardD += 2)
                         {
-                            for (int handCardE = 4; handCardE < handNumValue.Count; handCardE++)
+                            for (int handCardE = 4; handCardE < hand.Count; handCardE++)
                             {
-                                if (handNumValue[handCardA] + handNumValue[handCardB] + handNumValue[handCardC] + handNumValue[handCardD] + handNumValue[handCardE] == 15)
+                                if (hand[handCardA].AddingValue + hand[handCardB].AddingValue + hand[handCardC].AddingValue + hand[handCardD].AddingValue + hand[handCardE].AddingValue == 15)
                                 {
                                     tempPoints += 2;
                                     Console.WriteLine("15 for " + tempPoints);
@@ -260,14 +244,16 @@ namespace cribbage2021
                     }
                 }
             }
-            handNumValue.RemoveAt(5);
 
+            //Remove the blank value at the end of the list
+            hand.RemoveAt(5);
+           
             //Step 2: Count pairs
             for (int handCardA = 0; handCardA < hand.Count - 1; handCardA++)
             {
                 for (int handCardB = handCardA + 1; handCardB < hand.Count; handCardB++)
                 {
-                    if ((int)hand[handCardA] == (int)hand[handCardB])
+                    if (hand[handCardA].NumberValue == hand[handCardB].NumberValue)
                     {
                         tempPoints += 2;
                         Console.WriteLine("Pair for " + tempPoints);
@@ -279,7 +265,7 @@ namespace cribbage2021
             bool runs = false;
             //Step 3a: Find a 5 card run
 
-            if ((int)hand[0] + 1 == (int)hand[1] && (int)hand[1] + 1 == (int)hand[2] && (int)hand[2] + 1 == (int)hand[3] && (int)hand[3] + 1 == (int)hand[4])
+            if (hand[0].NumberValue + 1 == hand[1].NumberValue && hand[1].NumberValue + 1 == hand[2].NumberValue && hand[2].NumberValue + 1 == hand[3].NumberValue && hand[3].NumberValue + 1 == hand[4].NumberValue)
             {
                 tempPoints += 5;
                 Console.WriteLine("Run for " + tempPoints);
@@ -290,13 +276,13 @@ namespace cribbage2021
             if (!runs)
             {
                 List<int> testHand = new List<int>();
-                for (int indexSkip = 0; indexSkip < handNumValue.Count; indexSkip++)
+                for (int indexSkip = 0; indexSkip < hand.Count; indexSkip++)
                 {
-                    for (int indexUse = 0;indexUse < handNumValue.Count; indexUse++)
+                    for (int indexUse = 0;indexUse < hand.Count; indexUse++)
                     {
                         if (indexSkip != indexUse)
                         {
-                            testHand.Add(handNumValue[indexUse]);
+                            testHand.Add(hand[indexUse].NumberValue);
                         }
                     }
 
@@ -316,18 +302,17 @@ namespace cribbage2021
             if (!runs)
             {
                 List<int> testHand = new List<int>();
-                for (int indexSkip1 = 0; indexSkip1 < handNumValue.Count; indexSkip1++)
+                for (int indexSkip1 = 0; indexSkip1 < hand.Count; indexSkip1++)
                 {
-                    for (int indexSkip2 = indexSkip1 + 1; indexSkip2 < handNumValue.Count; indexSkip2++)
+                    for (int indexSkip2 = indexSkip1 + 1; indexSkip2 < hand.Count; indexSkip2++)
                     {
-                        for (int indexUse = 0; indexUse < handNumValue.Count; indexUse++)
+                        for (int indexUse = 0; indexUse < hand.Count; indexUse++)
                         {
                             if (indexSkip1 != indexUse && indexSkip2 != indexUse)
                             {
-                                testHand.Add(handNumValue[indexUse]);
+                                testHand.Add(hand[indexUse].NumberValue);
                             }
                         }
-
 
                         if (testHand[0] + 1 == testHand[1] && testHand[1] + 1 == testHand[2])
                         {
@@ -341,27 +326,21 @@ namespace cribbage2021
             }
 
             //Step 4: Check for flush (hand must be all the same suit, one bonus point if the starter matches)
-            List<decimal> handSuit = new List<decimal>();
-            foreach (decimal card in hand)
-            {
-                handSuit.Add(card % 1);
-            }
-
-            if (handSuit[0] == handSuit[1] && handSuit[1]==handSuit[2] && handSuit[2] == handSuit[3])
+            if (hand[0].SuitOfCard == hand[1].SuitOfCard && hand[1].SuitOfCard == hand[2].SuitOfCard && hand[2].SuitOfCard == hand[3].SuitOfCard)
             {
                 tempPoints += 4;
-                if (handSuit[3] == handSuit[4])
+                if (hand[3].SuitOfCard == hand[4].SuitOfCard)
                 {
                     tempPoints += 1;
                 }
                 Console.WriteLine("Flush for " + tempPoints);
             }
             //Step 5: Check for nobs (jack of suit matching the starter)
-            foreach(decimal card in hand)
+            foreach(Card card in hand)
             {
                 if (card != fullDeck[starterIndex])
                 {
-                    if (card / 1 == 11 && card % 1 == fullDeck[starterIndex] % 1)
+                    if (card.NumberValue == 11 && card.SuitOfCard == fullDeck[starterIndex].SuitOfCard)
                     {
                         tempPoints += 1;
                         Console.WriteLine("Nobs for " + tempPoints);
