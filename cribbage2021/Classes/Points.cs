@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace cribbage2021.Classes
@@ -7,14 +8,6 @@ namespace cribbage2021.Classes
     public class Points
     {
         Output output = new Output();
-
-        /*There should be multiple calls for methods
-         * 15s for multiple combinations (2,3,4,5)
-         * Runs (2,3,4,5)
-         * Flushes (4,5)
-         * 
-         * (hand,starter)
-         */
 
         public int Heels(Card starter, int tempPoints)
         {
@@ -48,10 +41,8 @@ namespace cribbage2021.Classes
             return points;
         }
 
-        public int Fifteens(List<Card> cards, Card starter, int points)
+        public int Fifteens(List<Card> cards, int points)
         {
-            cards.Add(starter);
-
             //Checking each combination of two cards
             for (int cardA = 0; cardA < cards.Count; cardA++)
             {
@@ -76,7 +67,6 @@ namespace cribbage2021.Classes
                         testHand.Add(cards[cardB]);
                         testHand.Add(cards[cardC]);
                         points = TestFifteen(testHand, points);
-                   
                     }
                 }
             }
@@ -94,6 +84,7 @@ namespace cribbage2021.Classes
                             testHand.Add(cards[cardA]);
                             testHand.Add(cards[cardB]);
                             testHand.Add(cards[cardC]);
+                            testHand.Add(cards[cardD]);
                             points = TestFifteen(testHand, points);
                         }
                     }
@@ -101,15 +92,17 @@ namespace cribbage2021.Classes
             }
 
             //Checking the five cards
-            points = TestFifteen(cards, points);
+            if (cards.Count == 5)
+            {
+                points = TestFifteen(cards, points);
+            }
 
             return points;
         }
 
-        public int Pairs(List<Card> cards, Card starter, int points)
+        public int Pairs(List<Card> cards, int points)
         {
             const int pairSuccess = 2;
-            cards.Add(starter);
             for (int card1 = 0; card1 < cards.Count; card1++)
             {
                 for (int card2 = card1 + 1; card2 < cards.Count; card2++)
@@ -119,37 +112,112 @@ namespace cribbage2021.Classes
                         points += pairSuccess;
                         output.Score("Pair", points);
                     }
-
                 }
             }
 
             return points;
         }
 
-        public bool Run(List<Card> cards)
+        //Need to figure out a way to skip indexes. Multiple runs (5,6,7,8,8) not working
+        public int Runs(List<Card> cards, int points)
         {
-            for (int i = 0; i < cards.Count - 1; i++)
+            bool runs = false;
+
+            for (int length = 5; length >= 3; length--)
             {
-                if (cards[i].NumberValue != cards[i + 1].NumberValue)
+                if (!runs)
                 {
-                    return false;
+                    for (int startIndex = 0; startIndex < cards.Count - length + 1; startIndex++)
+                    {
+                        List<Card> testHand = new List<Card>();
+
+                        if (startIndex == 5 - length)
+                        {
+                            for (int i = startIndex; i < length + startIndex; i++)
+                            {
+                                testHand.Add(cards[startIndex + i]);
+                            }
+                        }
+                        else
+                        {
+
+                            for (int skipIndex = startIndex + 1; skipIndex < cards.Count - 1; skipIndex++)
+                            {
+                                for (int addIndex = 0; addIndex < cards.Count - 1; addIndex++)
+                                {
+                                    if (startIndex + addIndex != skipIndex)
+                                    {
+                                        testHand.Add(cards[startIndex + addIndex]);
+                                    }
+                                }
+                            }
+                        }
+
+                        testHand = testHand.OrderBy(x => x.NumberValue)
+                             .ThenBy(x => x.SuitOfCard)
+                             .ToList();
+
+                        runs = true;
+                        for (int i = 0; i < testHand.Count - 1; i++)
+                        {
+
+                            if (testHand[i].NumberValue != testHand[i + 1].NumberValue - 1)
+                            {
+                                runs = false;
+                            }
+                        }
+
+                        if (runs)
+                        {
+                            points += testHand.Count;
+                            output.Score("Run", points);
+                        }
+
+                    }
                 }
             }
-
-            return true;
+            return points;
         }
 
-        public bool Flush(List<Card> cards)
+        public int Flush(List<Card> cards, Card starter, int points)
         {
-            for (int i = 0; i < cards.Count - 1; i++)
+            bool flush = true;
+            for (int i = 0; i < cards.Count - 2; i++)
             {
                 if (cards[i].SuitOfCard != cards[i + 1].SuitOfCard)
                 {
-                    return false;
+                    flush = false;
                 }
             }
 
-            return true;
+            if (flush)
+            {
+                if (cards[0].SuitOfCard == starter.SuitOfCard)
+                {
+                    points += 5;
+                }
+                else
+                {
+                    points += 4;
+                }
+
+                output.Score("Flush", points);
+            }
+
+            return points;
+        }
+
+        public int Knobs(List<Card> cards, Card starter, int points)
+        {
+            foreach (Card card in cards)
+            {
+                if (card.NameOfCard == "Jack" && card.SuitOfCard == starter.SuitOfCard)
+                {
+                    points++;
+                    output.Score("Knobs", points);
+                }
+            }
+            return points;
         }
     }
 }

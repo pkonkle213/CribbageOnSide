@@ -10,21 +10,28 @@ namespace cribbage2021.Classes
         Output output = new Output();
 
 
-        public int CountingFiveCards(List<Card> hand, Card starter)
+        public int CountingCards(List<Card> hand, Card starter)
         {
             int tempPoints = 0;
 
             tempPoints = points.Heels(starter, tempPoints);
-            tempPoints = points.Fifteens(hand, starter, tempPoints);
-            tempPoints = points.Pairs(hand, starter, tempPoints);
-            tempPoints = points.Runs(hand, starter, tempPoints);
+
+            if (starter.AddingValue >0)
+            {
+                hand.Add(starter);
+            }
+            tempPoints = points.Fifteens(hand, tempPoints);
+            tempPoints = points.Pairs(hand, tempPoints);
+            tempPoints = points.Runs(hand, tempPoints);
+            if (starter.AddingValue > 0)
+            {
+                hand.Remove(starter);
+            }
+
             tempPoints = points.Flush(hand, starter, tempPoints);
+            tempPoints = points.Knobs(hand, starter, tempPoints);
+
             return tempPoints;
-        }
-
-        public int CountingFourCards(List<Card> hand)
-        {
-
         }
     }
 }
