@@ -14,15 +14,6 @@ namespace cribbage2021
 
             /*
              * Methods I need:
-             * -Shuffling the deck
-             * -Printing the deck on the screen
-             * -Allowing the user to choose cards to discard
-             * -Checking for Heels
-             * -Counting 15s
-             * -Counting Pairs
-             * -Counting Runs
-             * -Counting Flush(es)
-             * -Checking for Nobs
              * -Returning to the beginning of the process if the deck still has 5 or more cards
              * -If the deck has 4 cards, count 15s/pairs/runs/flush for the 4 card hand
              * -A new feature: a "hall of fame" or "top scores" of 5-10 people? Record high hands?
@@ -33,75 +24,22 @@ namespace cribbage2021
 
             Points points = new Points();
             CountingPoints count = new CountingPoints();
-
-            List<Card> fullDeck = new List<Card>();
-            string suit;
-            for (int cardValue = 1; cardValue <= 13; cardValue++)
-            {
-                for (int cardSuit = 1; cardSuit <= 4; cardSuit++)
-                {
-                    if (cardSuit == 1)
-                    {
-                        suit = "Clubs";
-                    }
-                    else if (cardSuit == 2)
-                    {
-                        suit = "Diamonds";
-                    }
-                    else if (cardSuit == 3)
-                    {
-                        suit = "Hearts";
-                    }
-                    else
-                    {
-                        suit = "Spades";
-                    }
-
-                    fullDeck.Add(new Card(cardValue, suit));
-                }
-            }
-
+            Deck deck = new Deck();
+    
+            //Create a mew deck
+            List<Card> fullDeck = deck.CreateDeck();
+        
             //Start a running total
             int runningTotalPoints = 0;
 
             while (fullDeck.Count > 4)
             {
-                //Shuffle deck
-                Random rnd = new Random();
+                
+                fullDeck = deck.ShuffleDeck(fullDeck);
+                List<Card> handNew = deck.DealHand(fullDeck);
+                List<Card> crib = deck.DealCrib(fullDeck);
 
-                for (int shufIndex = 0; shufIndex < 1000; shufIndex++)
-                {
-                    int cardAIndex = rnd.Next(fullDeck.Count);
-                    int cardBIndex = rnd.Next(fullDeck.Count);
-
-                    while (cardAIndex == cardBIndex)  // Testing to make sure that the selected cards aren't the same card
-                    {
-                        cardAIndex = rnd.Next(fullDeck.Count);
-                        cardBIndex = rnd.Next(fullDeck.Count);
-                    }
-
-                    Card storage;
-                    storage = fullDeck[cardAIndex];
-                    fullDeck[cardAIndex] = fullDeck[cardBIndex];
-                    fullDeck[cardBIndex] = storage;
-                }
-
-                //Deal 3 cards to hand, 2 to crib, then 3 to hand
-                List<Card> handNew = new List<Card> {
-                fullDeck[0],
-                fullDeck[1],
-                fullDeck[2],
-                fullDeck[5],
-                fullDeck[6],
-                fullDeck[7]
-                };
-
-                List<Card> crib = new List<Card> {
-                fullDeck[3],
-                fullDeck[4]
-                };
-
-                //Remove the cards from the deck
+                //Remove the dealt cards from the deck
                 fullDeck.RemoveRange(0, 8);
 
                 // Sort the hand, thank you google!

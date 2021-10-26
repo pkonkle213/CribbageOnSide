@@ -34,8 +34,6 @@ namespace cribbage2021.Classes
                     fullDeck.Add(new Card(cardValue, suit));
                 }
             }
-
-
         }
     }
 }

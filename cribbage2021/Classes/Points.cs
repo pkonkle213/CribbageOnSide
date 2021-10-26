@@ -121,62 +121,77 @@ namespace cribbage2021.Classes
         //Need to figure out a way to skip indexes. Multiple runs (5,6,7,8,8) not working
         public int Runs(List<Card> cards, int points)
         {
-            bool runs = false;
+            cards = cards.OrderBy(x => x.NumberValue)
+                .ThenBy(x => x.SuitOfCard)
+                .ToList();
 
-            for (int length = 5; length >= 3; length--)
+            bool runs = TestRun(cards);
+
+            if (runs)
             {
-                if (!runs)
+                points += 5;
+                output.Score("Run", points);
+            }
+            else
+            {
+                for (int skip = 0; skip < cards.Count; skip++)
                 {
-                    for (int startIndex = 0; startIndex < cards.Count - length + 1; startIndex++)
+                    List<Card> testHand = new List<Card>();
+                    for (int i = 0; i < cards.Count; i++)
                     {
-                        List<Card> testHand = new List<Card>();
-
-                        if (startIndex == 5 - length)
+                        if (skip != i)
                         {
-                            for (int i = startIndex; i < length + startIndex; i++)
-                            {
-                                testHand.Add(cards[startIndex + i]);
-                            }
+                            testHand.Add(cards[i]);
                         }
-                        else
-                        {
+                    }
 
-                            for (int skipIndex = startIndex + 1; skipIndex < cards.Count - 1; skipIndex++)
+                    if (TestRun(testHand))
+                    {
+                        points += 4;
+                        output.Score("Run", points);
+                        runs = true;
+                    }
+                }
+
+                if (runs)
+                {
+                    for (int skip1 = 0; skip1 < cards.Count; skip1++)
+                    {
+                        for (int skip2 = skip1 + 1; skip2 < cards.Count; skip2++)
+                        {
+                            List<Card> testHand = new List<Card>;
+                            for(int i=0; i< cards.Count; i++)
                             {
-                                for (int addIndex = 0; addIndex < cards.Count - 1; addIndex++)
+                                if (i!=skip1 && i != skip2)
                                 {
-                                    if (startIndex + addIndex != skipIndex)
-                                    {
-                                        testHand.Add(cards[startIndex + addIndex]);
-                                    }
+                                    testHand.Add(cards[i]);
                                 }
                             }
-                        }
 
-                        testHand = testHand.OrderBy(x => x.NumberValue)
-                             .ThenBy(x => x.SuitOfCard)
-                             .ToList();
-
-                        runs = true;
-                        for (int i = 0; i < testHand.Count - 1; i++)
-                        {
-
-                            if (testHand[i].NumberValue != testHand[i + 1].NumberValue - 1)
+                            if (TestRun(testHand))
                             {
-                                runs = false;
+                                points += 3;
+                                output.Score("Run", 3);
                             }
                         }
-
-                        if (runs)
-                        {
-                            points += testHand.Count;
-                            output.Score("Run", points);
-                        }
-
                     }
                 }
             }
+
             return points;
+        }
+
+        public bool TestRun(List<Card> cards)
+        {
+            for (int i = 0; i < cards.Count - 1; i++)
+            {
+                if (cards[i].NumberValue != cards[i + 1].NumberValue - 1)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public int Flush(List<Card> cards, Card starter, int points)
