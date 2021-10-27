@@ -91,6 +91,7 @@ namespace cribbage2021
                            .ToList();
 
                 // Randomly select Starter card
+                Random rnd = new Random();
                 int starterIndex = rnd.Next(fullDeck.Count);
                 Card starterNew = fullDeck[starterIndex];
 

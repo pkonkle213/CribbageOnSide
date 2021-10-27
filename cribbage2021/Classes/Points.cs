@@ -159,7 +159,7 @@ namespace cribbage2021.Classes
                     {
                         for (int skip2 = skip1 + 1; skip2 < cards.Count; skip2++)
                         {
-                            List<Card> testHand = new List<Card>;
+                            List<Card> testHand = new List<Card>();
                             for(int i=0; i< cards.Count; i++)
                             {
                                 if (i!=skip1 && i != skip2)
