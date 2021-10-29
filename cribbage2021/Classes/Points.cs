@@ -153,16 +153,16 @@ namespace cribbage2021.Classes
                     }
                 }
 
-                if (runs)
+                if (!runs)
                 {
                     for (int skip1 = 0; skip1 < cards.Count; skip1++)
                     {
                         for (int skip2 = skip1 + 1; skip2 < cards.Count; skip2++)
                         {
                             List<Card> testHand = new List<Card>();
-                            for(int i=0; i< cards.Count; i++)
+                            for (int i = 0; i < cards.Count; i++)
                             {
-                                if (i!=skip1 && i != skip2)
+                                if (i != skip1 && i != skip2)
                                 {
                                     testHand.Add(cards[i]);
                                 }
@@ -171,7 +171,7 @@ namespace cribbage2021.Classes
                             if (TestRun(testHand))
                             {
                                 points += 3;
-                                output.Score("Run", 3);
+                                output.Score("Run", points);
                             }
                         }
                     }

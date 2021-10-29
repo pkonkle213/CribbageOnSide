@@ -158,7 +158,6 @@ namespace CribbageTests
         [TestMethod]
         public void RunsShouldFindAThreeCardRun()
         {
-            int initialPoints = 0;
             //Arrange
             Points point = new Points();
             List<Card> cards = new List<Card>
@@ -169,16 +168,15 @@ namespace CribbageTests
             };
 
             //Act
-            int success = point.Runs(cards, initialPoints);
+            bool success = point.TestRun(cards);
 
             //Assert
-            Assert.AreEqual(cards.Count, success);
+            Assert.IsTrue(success);
         }
 
         [TestMethod]
         public void RunsShouldFindAFourCardRun()
         {
-            int initialPoints = 0;
             //Arrange
             Points point = new Points();
             List<Card> cards = new List<Card>
@@ -190,16 +188,15 @@ namespace CribbageTests
             };
 
             //Act
-            int success = point.Runs(cards, initialPoints);
+            bool success = point.TestRun(cards);
 
             //Assert
-            Assert.AreEqual(cards.Count, success);
+            Assert.IsTrue(success);
         }
 
         [TestMethod]
         public void RunsShouldFindAFiveCardRun()
         {
-            int initialPoints = 0;
             //Arrange
             Points point = new Points();
             List<Card> cards = new List<Card>
@@ -212,25 +209,25 @@ namespace CribbageTests
             };
 
             //Act
-            int success = point.Runs(cards, initialPoints);
+            bool success = point.TestRun(cards);
 
             //Assert
-            Assert.AreEqual(cards.Count, success);
+            Assert.IsTrue(success);
         }
 
         [TestMethod]
-        public void RunsShouldFindMultipleRuns()
+        public void RunsShouldFindDoubleRun()
         {
             int initialPoints = 0;
             //Arrange
             Points point = new Points();
             List<Card> cards = new List<Card>
             {
-                new Card(5,"Clubs"),
                 new Card(6,"Spades"),
-                new Card(7,"Diamonds"),
                 new Card(8,"Diamonds"),
-                new Card(8,"Hearts")
+                new Card(5,"Clubs"),
+                new Card(8,"Hearts"),
+                new Card(7,"Diamonds")
             };
 
             //Act
@@ -238,6 +235,28 @@ namespace CribbageTests
 
             //Assert
             Assert.AreEqual(8, success);
+        }
+
+        [TestMethod]
+        public void RunsShouldFindQuadRun()
+        {
+            int initialPoints = 0;
+            //Arrange
+            Points point = new Points();
+            List<Card> cards = new List<Card>
+            {
+                new Card(6,"Spades"),
+                new Card(8,"Diamonds"),
+                new Card(6,"Clubs"),
+                new Card(8,"Hearts"),
+                new Card(7,"Diamonds")
+            };
+
+            //Act
+            int success = point.Runs(cards, initialPoints);
+
+            //Assert
+            Assert.AreEqual(12, success);
         }
 
         [TestMethod]
