@@ -12,7 +12,9 @@ namespace cribbage2021.Classes
             Deck deck = new Deck();
             Points points = new Points();
             CountingPoints count = new CountingPoints();
+            const int textPad = 9;
 
+            //Create a new deck
             List<Card> fullDeck = deck.CreateDeck();
             //Start a running total
             int runningTotalPoints = 0;
@@ -33,43 +35,55 @@ namespace cribbage2021.Classes
                            .ToList();
 
                 //Reveal what's in the hand
-                Console.WriteLine("    1         2         3         4         5         6");
-                Console.WriteLine("--------- --------- --------- --------- --------- ---------");
+                Console.WriteLine("   #1       #2       #3       #4       #5       #6");
+                Console.WriteLine("-------- -------- -------- -------- -------- --------");
 
                 //Writing the values
                 foreach (Card cardHand in handNew)
                 {
-                    Console.Write(cardHand.NameOfCard.PadRight(10));
+                    Console.Write(cardHand.NameOfCard.PadRight(textPad));
                 }
                 Console.WriteLine();
 
                 //Writing the suits
                 foreach (Card cardHand in handNew)
                 {
-                    Console.Write(cardHand.SuitOfCard.PadRight(10));
+                    Console.Write(cardHand.SuitOfCard.PadRight(textPad));
                 }
 
                 //Prompt the user to select two cards to send to the crib
                 Console.WriteLine();
-                Console.WriteLine();
-                Console.Write("What two cards would you like to discard? (Their associated numbers separated by a space) ");
-                string discardStr = Console.ReadLine();
-                string[] discardStrSplit = discardStr.Split(" ");
-                string discardCardOne = discardStrSplit[0];
-                string discardCardTwo = discardStrSplit[1];
-
-                while (!int.TryParse(discardCardOne, out int CardOne) || !int.TryParse(discardCardOne, out int CardTwo))
+                bool input = false;
+                while (!input)
                 {
-                    Console.WriteLine("Please enter appropriate values");
+                    Console.WriteLine();
+                    Console.Write("What two cards would you like to discard? (Their associated numbers separated by a space) ");
+                    string discardStr = Console.ReadLine();
+                    string[] discardStrSplit = discardStr.Split(" ");
+                    try
+                    {
+
+                        string discardCardOne = discardStrSplit[0];
+                        string discardCardTwo = discardStrSplit[1];
+
+                        int discardOne = int.Parse(discardCardOne);
+                        int discardTwo = int.Parse(discardCardTwo);
+
+                        crib.Add(handNew[discardOne - 1]);
+                        crib.Add(handNew[discardTwo - 1]);
+                        handNew.Remove(crib[2]);
+                        handNew.Remove(crib[3]);
+                        input = true;
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Please enter appropriate values");
+                    }
+                    catch (IndexOutOfRangeException)
+                    {
+                        Console.WriteLine("Please enter appropriate values");
+                    }
                 }
-
-                int discardOne = int.Parse(discardCardOne);
-                int discardTwo = int.Parse(discardCardTwo);
-
-                crib.Add(handNew[discardOne - 1]);
-                crib.Add(handNew[discardTwo - 1]);
-                handNew.Remove(crib[2]);
-                handNew.Remove(crib[3]);
 
                 crib = crib.OrderBy(x => x.NumberValue)
                            .ThenBy(x => x.SuitOfCard)
@@ -81,12 +95,12 @@ namespace cribbage2021.Classes
                 Card starterNew = fullDeck[starterIndex];
 
                 Console.Clear();
-                Console.WriteLine("--------------------Your hand--------------------");
-                Console.WriteLine("    1         2         3         4      Starter");
-                Console.WriteLine("--------- --------- --------- --------- ---------");
+                Console.WriteLine("------------------Your hand----------------");
+                Console.WriteLine("   #1       #2       #3       #4    Starter");
+                Console.WriteLine("-------- -------- -------- -------- -------");
                 foreach (Card cardHand in handNew)
                 {
-                    Console.Write(cardHand.NameOfCard.PadRight(10));
+                    Console.Write(cardHand.NameOfCard.PadRight(textPad));
                 }
                 Console.Write(starterNew.NameOfCard);
                 Console.WriteLine();
@@ -94,7 +108,7 @@ namespace cribbage2021.Classes
                 //Writing the suits
                 foreach (Card cardHand in handNew)
                 {
-                    Console.Write(cardHand.SuitOfCard.PadRight(10));
+                    Console.Write(cardHand.SuitOfCard.PadRight(textPad));
                 }
                 Console.Write(starterNew.SuitOfCard);
                 Console.WriteLine();
@@ -109,12 +123,12 @@ namespace cribbage2021.Classes
                 Console.ReadLine();
                 Console.Clear();
 
-                Console.WriteLine("--------------------Your crib--------------------");
-                Console.WriteLine("    1         2         3         4      Starter");
-                Console.WriteLine("--------- --------- --------- --------- ---------");
+                Console.WriteLine("-----------------Your crib-----------------");
+                Console.WriteLine("   #1       #2       #3       #4    Starter");
+                Console.WriteLine("-------- -------- -------- -------- -------");
                 foreach (Card cardHand in crib)
                 {
-                    Console.Write(cardHand.NameOfCard.PadRight(10));
+                    Console.Write(cardHand.NameOfCard.PadRight(textPad));
                 }
                 Console.Write(starterNew.NameOfCard);
                 Console.WriteLine();
@@ -122,7 +136,7 @@ namespace cribbage2021.Classes
                 //Writing the suits
                 foreach (Card cardHand in crib)
                 {
-                    Console.Write(cardHand.SuitOfCard.PadRight(10));
+                    Console.Write(cardHand.SuitOfCard.PadRight(textPad));
                 }
                 Console.Write(starterNew.SuitOfCard);
                 Console.WriteLine();
@@ -148,19 +162,19 @@ namespace cribbage2021.Classes
             Card starter = new Card(0, "None");
 
             Console.Clear();
-            Console.WriteLine("-------------Your last hand------------");
-            Console.WriteLine("    1         2         3         4    ");
-            Console.WriteLine("--------- --------- --------- ---------");
+            Console.WriteLine("-----------Your last hand-----------");
+            Console.WriteLine("   #1       #2       #3       #4    ");
+            Console.WriteLine("-------- -------- -------- --------");
             foreach (Card cardHand in hand)
             {
-                Console.Write(cardHand.NameOfCard.PadRight(10));
+                Console.Write(cardHand.NameOfCard.PadRight(textPad));
             }
             Console.WriteLine();
 
             //Writing the suits
             foreach (Card cardHand in hand)
             {
-                Console.Write(cardHand.SuitOfCard.PadRight(10));
+                Console.Write(cardHand.SuitOfCard.PadRight(textPad));
             }
             Console.WriteLine();
 
