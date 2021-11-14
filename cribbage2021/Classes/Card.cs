@@ -12,6 +12,9 @@ namespace cribbage2021.Classes
             this.NumberValue = numberValue;
         }
 
+        public string SuitOfCard { get; }
+
+        public int NumberValue { get; }
 
         public string NameOfCard
         {
@@ -48,8 +51,6 @@ namespace cribbage2021.Classes
             }
         }
 
-        public string SuitOfCard { get; }
-        public int NumberValue { get; }
         public int AddingValue
         {
             get
