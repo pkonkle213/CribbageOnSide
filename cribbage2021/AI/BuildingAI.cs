@@ -1,11 +1,12 @@
 ﻿using cribbage2021.AI;
+using cribbage2021.Classes;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace cribbage2021.Classes
+namespace cribbage2021.AI
 {
     public class BuildingAI
     {
@@ -17,8 +18,7 @@ namespace cribbage2021.Classes
             Deck deck = new Deck();
             List<Card> fullDeck = deck.CreateDeck();
             List<int> scores = new List<int>();
-            AICount count = new AICount();
-
+            CountingPoints count = new CountingPoints();
 
             for (int starterIndex = 0; starterIndex < fullDeck.Count; starterIndex++)
             {
@@ -44,8 +44,8 @@ namespace cribbage2021.Classes
                                                 hand.Add(fullDeck[cardC]);
                                                 hand.Add(fullDeck[cardD]);
 
-                                                int handScore = count.CountingCards(hand, fullDeck[starterIndex]);
-                                                // Console.WriteLine(cardA.ToString().PadRight(3) + cardB.ToString().PadRight(3) + cardC.ToString().PadRight(3) + cardD.ToString().PadRight(3) + starterIndex.ToString().PadRight(3) + handScore);
+                                                int handScore = count.CountingCards(hand, fullDeck[starterIndex], true, false);
+                                                Console.WriteLine(cardA.ToString().PadRight(3) + cardB.ToString().PadRight(3) + cardC.ToString().PadRight(3) + cardD.ToString().PadRight(3) + starterIndex.ToString().PadRight(3) + handScore);
                                                 // record.Record(fullDeck[cardA], fullDeck[cardB], fullDeck[cardC], fullDeck[cardD], fullDeck[starterIndex], handScore);
                                                 scores.Add(handScore);
                                             }
@@ -73,6 +73,7 @@ namespace cribbage2021.Classes
         public void OddsOfHand()
         {
             List<Card> hand = new List<Card>();
+            CountingPoints count = new CountingPoints();
             Console.Clear();
             for (int i = 0; i < 6; i++)
             {
@@ -110,7 +111,7 @@ namespace cribbage2021.Classes
             {
                 for (int cardB = cardA + 1; cardB < hand.Count; cardB++)
                 {
-                    for(int cardC = cardB + 1; cardC < hand.Count; cardC++)
+                    for (int cardC = cardB + 1; cardC < hand.Count; cardC++)
                     {
                         for (int cardD = cardC + 1; cardD < hand.Count; cardD++)
                         {
@@ -119,31 +120,14 @@ namespace cribbage2021.Classes
                             sample.Add(hand[cardB]);
                             sample.Add(hand[cardC]);
                             sample.Add(hand[cardD]);
+                            Card starter = new Card(0, "None");
+                            int points = count.CountingCards(sample, starter, true, false);
 
-                            List<int> scores = TestHand(sample);
-                            Console.WriteLine(scores.Max());
+                            Console.WriteLine($"{hand[cardA].NameOfCard} {hand[cardA].SuitOfCard}, {hand[cardB].NameOfCard} {hand[cardB].SuitOfCard}, {hand[cardC].NameOfCard} {hand[cardC].SuitOfCard}, {hand[cardD].NameOfCard} {hand[cardD].SuitOfCard} - {points}");
                         }
                     }
                 }
             }
-        }
-
-        public List<int> TestHand(List<Card> hand)
-        {
-            Deck deck = new Deck();
-            List<Card> fullDeck = deck.CreateDeck();
-            List<int> scores = new List<int>();
-            AICount count = new AICount();
-
-            foreach (Card card in fullDeck)
-            {
-                if (!(hand.Contains(card)))
-                {
-                    scores.Add(count.CountingCards(hand, card));
-                }
-            }
-
-            return scores;
         }
     }
 }

@@ -170,8 +170,8 @@ namespace cribbage2021.Classes
             Card starter = new Card(0, "None");
 
             Console.Clear();
-            Console.WriteLine("-----------Your last hand-----------");
-            Console.WriteLine("   #1       #2       #3       #4    ");
+            Console.WriteLine("----------Your last hand-----------");
+            Console.WriteLine("   #1       #2       #3       #4");
             Console.WriteLine("-------- -------- -------- --------");
             foreach (Card cardHand in hand)
             {

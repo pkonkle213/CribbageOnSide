@@ -1,4 +1,5 @@
 ﻿using cribbage2021.Classes;
+using cribbage2021.AI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,7 +77,7 @@ namespace cribbage2021
             Console.WriteLine("This feature is not yet implemented.");
             Console.WriteLine("Press [Enter] to continue.");
             string answer = Console.ReadLine();
-            if (answer == "Phillip".ToUpper())
+            if (answer.ToUpper() == "Phillip".ToUpper())
             {
                 BuildingAI ai = new BuildingAI();
                 ai.mathTime();
@@ -89,7 +90,7 @@ namespace cribbage2021
             Console.WriteLine("This feature is not yet implemented.");
             Console.WriteLine("Press [Enter] to continue.");
             string answer = Console.ReadLine();
-            if (answer == "Phillip".ToUpper())
+            if (answer.ToUpper() == "Phillip".ToUpper())
             {
                 BuildingAI ai = new BuildingAI();
                 ai.OddsOfHand();
