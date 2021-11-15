@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using cribbage2021.Classes;
 
 namespace cribbage2021.Classes
 {
@@ -13,6 +14,7 @@ namespace cribbage2021.Classes
             Points points = new Points();
             CountingPoints count = new CountingPoints();
             const int textPad = 9;
+            TestHand test = new TestHand();
 
             //Create a new deck
             List<Card> fullDeck = deck.CreateDeck();
@@ -50,6 +52,12 @@ namespace cribbage2021.Classes
                 {
                     Console.Write(cardHand.SuitOfCard.PadRight(textPad));
                 }
+
+
+
+                test.ShowHands(handNew, fullDeck);
+
+
 
                 //Prompt the user to select two cards to send to the crib
                 Console.WriteLine();
@@ -114,7 +122,7 @@ namespace cribbage2021.Classes
                 Console.WriteLine();
 
                 //Add points to running total, reshuffle deck and start again (this process will go until all but 4 cards have been used)
-                int handPoints = count.CountingCards(handNew, starterNew);
+                int handPoints = count.CountingCards(handNew, starterNew, false, true);
                 Console.WriteLine($"Total points for your hand: {handPoints}");
                 runningTotalPoints += handPoints;
                 Console.WriteLine();
@@ -141,7 +149,7 @@ namespace cribbage2021.Classes
                 Console.Write(starterNew.SuitOfCard);
                 Console.WriteLine();
 
-                int cribPoints = count.CountingCards(crib, starterNew);
+                int cribPoints = count.CountingCards(crib, starterNew, true, true);
                 Console.WriteLine($"Total points for your crib: {cribPoints}");
                 runningTotalPoints += cribPoints;
                 Console.WriteLine();
@@ -179,12 +187,12 @@ namespace cribbage2021.Classes
             Console.WriteLine();
 
             //Add points to running total, reshuffle deck and start again (this process will go until all but 4 cards have been used)
-            int finalHandPoints = count.CountingCards(hand, starter);
+            int finalHandPoints = count.CountingCards(hand, starter, false, true);
             Console.WriteLine($"Total points for your hand: {finalHandPoints}");
             Console.WriteLine("Press [Enter] to continue.");
             Console.Clear();
 
-            runningTotalPoints += count.CountingCards(hand, starter);
+            runningTotalPoints += finalHandPoints;
 
             Console.WriteLine($"Congratulations! Your final score is: {runningTotalPoints}");
             Console.WriteLine("Press [Enter] to exit");

@@ -12,3 +12,9 @@ C:\Users\Student\source\repos\cribbage2021\cribbage2021\obj\Debug\netcoreapp3.1\
 C:\Users\Student\source\repos\cribbage2021\cribbage2021\obj\Debug\netcoreapp3.1\cribbage2021.pdb
 C:\Users\Student\source\repos\cribbage2021\cribbage2021\obj\Debug\netcoreapp3.1\cribbage2021.genruntimeconfig.cache
 C:\Users\Student\source\repos\cribbage2021\cribbage2021\obj\Debug\netcoreapp3.1\cribbage2021.csproj.AssemblyReference.cache
+C:\Users\Student\source\repos\cribbage2021\cribbage2021\bin\Debug\netcoreapp3.1\Microsoft.Data.Tools.Schema.Sql.dll
+C:\Users\Student\source\repos\cribbage2021\cribbage2021\bin\Debug\netcoreapp3.1\Microsoft.Data.Tools.Schema.Sql.UnitTesting.dll
+C:\Users\Student\source\repos\cribbage2021\cribbage2021\bin\Debug\netcoreapp3.1\Microsoft.Data.Tools.Schema.Sql.UnitTestingAdapter.dll
+C:\Users\Student\source\repos\cribbage2021\cribbage2021\bin\Debug\netcoreapp3.1\Microsoft.Data.Tools.Utilities.dll
+C:\Users\Student\source\repos\cribbage2021\cribbage2021\bin\Debug\netcoreapp3.1\Microsoft.SqlServer.TransactSql.ScriptDom.dll
+C:\Users\Student\source\repos\cribbage2021\cribbage2021\obj\Debug\netcoreapp3.1\cribbage2021.csproj.CopyComplete

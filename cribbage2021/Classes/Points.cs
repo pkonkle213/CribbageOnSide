@@ -9,20 +9,23 @@ namespace cribbage2021.Classes
     {
         Output output = new Output();
 
-        public int Heels(Card starter, int tempPoints)
+        public int Heels(Card starter, int tempPoints, bool outWrite)
         {
             const int heelsSuccess = 2;
             const string category = "Heels";
             if (starter.NameOfCard == "Jack")
             {
                 tempPoints += heelsSuccess;
-                output.Score(category, tempPoints);
+                if (outWrite)
+                {
+                    output.Score(category, tempPoints);
+                }
             }
 
             return tempPoints;
         }
 
-        public int TestFifteen(List<Card> testHand, int points)
+        public int TestFifteen(List<Card> testHand, int points, bool outWrite)
         {
             const int sumNeeded = 15;
             const int fifteenSuccess = 2;
@@ -35,13 +38,16 @@ namespace cribbage2021.Classes
             if (sum == sumNeeded)
             {
                 points += fifteenSuccess;
-                output.Score("15", points);
+                if (outWrite)
+                {
+                    output.Score("15", points);
+                }
             }
 
             return points;
         }
 
-        public int Fifteens(List<Card> cards, int points)
+        public int Fifteens(List<Card> cards, int points, bool outWrite)
         {
             //Checking each combination of two cards
             for (int cardA = 0; cardA < cards.Count; cardA++)
@@ -51,7 +57,7 @@ namespace cribbage2021.Classes
                     List<Card> testHand = new List<Card>();
                     testHand.Add(cards[cardA]);
                     testHand.Add(cards[cardB]);
-                    points = TestFifteen(testHand, points);
+                    points = TestFifteen(testHand, points, outWrite);
                 }
             }
 
@@ -66,7 +72,7 @@ namespace cribbage2021.Classes
                         testHand.Add(cards[cardA]);
                         testHand.Add(cards[cardB]);
                         testHand.Add(cards[cardC]);
-                        points = TestFifteen(testHand, points);
+                        points = TestFifteen(testHand, points, outWrite);
                     }
                 }
             }
@@ -85,7 +91,7 @@ namespace cribbage2021.Classes
                             testHand.Add(cards[cardB]);
                             testHand.Add(cards[cardC]);
                             testHand.Add(cards[cardD]);
-                            points = TestFifteen(testHand, points);
+                            points = TestFifteen(testHand, points, outWrite);
                         }
                     }
                 }
@@ -94,13 +100,13 @@ namespace cribbage2021.Classes
             //Checking the five cards
             if (cards.Count == 5)
             {
-                points = TestFifteen(cards, points);
+                points = TestFifteen(cards, points, outWrite);
             }
 
             return points;
         }
 
-        public int Pairs(List<Card> cards, int points)
+        public int Pairs(List<Card> cards, int points, bool outWrite)
         {
             const int pairSuccess = 2;
             for (int card1 = 0; card1 < cards.Count; card1++)
@@ -110,7 +116,10 @@ namespace cribbage2021.Classes
                     if (cards[card1].NameOfCard == cards[card2].NameOfCard)
                     {
                         points += pairSuccess;
-                        output.Score("Pair", points);
+                        if (outWrite)
+                        {
+                            output.Score("Pair", points);
+                        }
                     }
                 }
             }
@@ -118,19 +127,21 @@ namespace cribbage2021.Classes
             return points;
         }
 
-        //Need to figure out a way to skip indexes. Multiple runs (5,6,7,8,8) not working
-        public int Runs(List<Card> cards, int points)
+        public int Runs(List<Card> cards, int points, bool outWrite)
         {
             cards = cards.OrderBy(x => x.NumberValue)
                 .ThenBy(x => x.SuitOfCard)
                 .ToList();
 
-            bool runs = TestRun(cards);
+            bool runs = false;
 
-            if (runs)
+            if (TestRun(cards))
             {
-                points += 5;
-                output.Score("Run", points);
+                points += cards.Count;
+                if (outWrite)
+                {
+                    output.Score("Run", points);
+                }
             }
             else
             {
@@ -147,13 +158,16 @@ namespace cribbage2021.Classes
 
                     if (TestRun(testHand))
                     {
-                        points += 4;
-                        output.Score("Run", points);
+                        points += cards.Count - 1;
+                        if (outWrite)
+                        {
+                            output.Score("Run", points);
+                        }
                         runs = true;
                     }
                 }
 
-                if (!runs)
+                if (!runs && cards.Count - 2 >= 3)
                 {
                     for (int skip1 = 0; skip1 < cards.Count; skip1++)
                     {
@@ -171,7 +185,10 @@ namespace cribbage2021.Classes
                             if (TestRun(testHand))
                             {
                                 points += 3;
-                                output.Score("Run", points);
+                                if (outWrite)
+                                {
+                                    output.Score("Run", points);
+                                }
                             }
                         }
                     }
@@ -194,42 +211,51 @@ namespace cribbage2021.Classes
             return true;
         }
 
-        public int Flush(List<Card> cards, Card starter, int points)
+        public int Flush(List<Card> cards, Card starter, int points, bool crib, bool outWrite)
         {
-            bool flush = true;
+            bool fourFlush = true;
             for (int i = 0; i < cards.Count - 2; i++)
             {
                 if (cards[i].SuitOfCard != cards[i + 1].SuitOfCard)
                 {
-                    flush = false;
+                    fourFlush = false;
                 }
             }
 
-            if (flush)
+            if (fourFlush)
             {
                 if (cards[0].SuitOfCard == starter.SuitOfCard)
                 {
                     points += 5;
+                    if (outWrite)
+                    {
+                        output.Score("Flush", points);
+                    }
                 }
-                else
+                else if (!crib)
                 {
                     points += 4;
+                    if (outWrite)
+                    {
+                        output.Score("Flush", points);
+                    }
                 }
-
-                output.Score("Flush", points);
             }
 
             return points;
         }
 
-        public int Knobs(List<Card> cards, Card starter, int points)
+        public int Knobs(List<Card> cards, Card starter, int points, bool outWrite)
         {
             foreach (Card card in cards)
             {
                 if (card.NameOfCard == "Jack" && card.SuitOfCard == starter.SuitOfCard)
                 {
                     points++;
-                    output.Score("Knobs", points);
+                    if (outWrite)
+                    {
+                        output.Score("Knobs", points);
+                    }
                 }
             }
             return points;

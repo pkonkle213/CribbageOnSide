@@ -2,11 +2,22 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System;
+using System.IO;
 
 namespace cribbage2021
 {
     public class Program
     {
+        // Get the connection string from the appsettings.json file
+        /*       IConfigurationBuilder builder = new ConfigurationBuilder()
+                   .SetBasePath(Directory.GetCurrentDirectory())
+                   .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+               IConfigurationRoot configuration = builder.Build()
+
+               string connectionString = configuration.GetConnectionString("Project");
+        */
         public static void Main(string[] args)
         {
             bool quit = false;

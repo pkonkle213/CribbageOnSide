@@ -20,7 +20,7 @@ namespace CribbageTests
             };
 
             //Act
-            int success = point.Fifteens(cards, initialPoints);
+            int success = point.Fifteens(cards, initialPoints, false);
 
             //Assert
             Assert.AreEqual(valueOfFifteen, success);
@@ -40,7 +40,7 @@ namespace CribbageTests
             };
 
             //Act
-            int success = point.Fifteens(cards, initialPoints);
+            int success = point.Fifteens(cards, initialPoints, false);
 
             //Assert
             Assert.AreEqual(valueOfFifteen, success);
@@ -61,7 +61,7 @@ namespace CribbageTests
             };
 
             //Act
-            int success = point.Fifteens(cards, initialPoints);
+            int success = point.Fifteens(cards, initialPoints, false);
 
             //Assert
             Assert.AreEqual(valueOfFifteen, success);
@@ -83,7 +83,7 @@ namespace CribbageTests
             };
 
             //Act
-            int success = point.Fifteens(cards, initialPoints);
+            int success = point.Fifteens(cards, initialPoints, false);
 
             //Assert
             Assert.AreEqual(valueOfFifteen, success);
@@ -106,7 +106,7 @@ namespace CribbageTests
             };
 
             //Act
-            int success = point.Fifteens(cards, initialPoints);
+            int success = point.Fifteens(cards, initialPoints, false);
 
             //Assert
             Assert.AreEqual(valueOfFifteen * successes, success);
@@ -126,7 +126,7 @@ namespace CribbageTests
             };
 
             //Act
-            int success = point.Pairs(cards, initialPoints);
+            int success = point.Pairs(cards, initialPoints, false);
 
             //Assert
             Assert.AreEqual(valueOfPair, success);
@@ -149,7 +149,7 @@ namespace CribbageTests
             };
 
             //Act
-            int success = point.Pairs(cards, initialPoints);
+            int success = point.Pairs(cards, initialPoints, false);
 
             //Assert
             Assert.AreEqual(valueOfPair * successes, success);
@@ -231,7 +231,7 @@ namespace CribbageTests
             };
 
             //Act
-            int success = point.Runs(cards, initialPoints);
+            int success = point.Runs(cards, initialPoints, false);
 
             //Assert
             Assert.AreEqual(8, success);
@@ -253,7 +253,7 @@ namespace CribbageTests
             };
 
             //Act
-            int success = point.Runs(cards, initialPoints);
+            int success = point.Runs(cards, initialPoints, false);
 
             //Assert
             Assert.AreEqual(12, success);
@@ -275,7 +275,7 @@ namespace CribbageTests
             Card starter = new Card(8, "Hearts");
 
             //Act
-            int success = point.Flush(cards, starter, initialPoints);
+            int success = point.Flush(cards, starter, initialPoints, false, false);
 
             //Assert
             Assert.AreEqual(0, success);
@@ -297,7 +297,7 @@ namespace CribbageTests
             Card starter = new Card(8, "Hearts");
 
             //Act
-            int success = point.Flush(cards, starter, initialPoints);
+            int success = point.Flush(cards, starter, initialPoints,false, false);
 
             //Assert
             Assert.AreEqual(4, success);
@@ -319,10 +319,32 @@ namespace CribbageTests
             Card starter = new Card(9, "Diamonds");
 
             //Act
-            int success = point.Flush(cards, starter, initialPoints);
+            int success = point.Flush(cards, starter, initialPoints, false, false);
 
             //Assert
             Assert.AreEqual(5, success);
+        }
+
+        [TestMethod]
+        public void FlushShouldNotFindFourCardFlushIfCrib()
+        {
+            int initialPoints = 0;
+            //Arrange
+            Points point = new Points();
+            List<Card> cards = new List<Card>
+            {
+                new Card(5,"Diamonds"),
+                new Card(6,"Diamonds"),
+                new Card(7,"Diamonds"),
+                new Card(8,"Diamonds")
+            };
+            Card starter = new Card(9, "Spades");
+
+            //Act
+            int success = point.Flush(cards, starter, initialPoints, true, false);
+
+            //Assert
+            Assert.AreEqual(0, success);
         }
 
         [TestMethod]
@@ -341,7 +363,7 @@ namespace CribbageTests
             Card starter = new Card(9, "Diamonds");
 
             //Act
-            int success = point.Knobs(cards, starter, initialPoints);
+            int success = point.Knobs(cards, starter, initialPoints, false);
 
             //Assert
             Assert.AreEqual(1, success);
@@ -363,7 +385,7 @@ namespace CribbageTests
             Card starter = new Card(9, "Diamonds");
 
             //Act
-            int success = point.Knobs(cards, starter, initialPoints);
+            int success = point.Knobs(cards, starter, initialPoints, false);
 
             //Assert
             Assert.AreEqual(0, success);

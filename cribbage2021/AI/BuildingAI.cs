@@ -14,7 +14,6 @@ namespace cribbage2021.Classes
         public void mathTime()
         {
             //This is only because I'm a monster and I like pain
-            //lol
             Deck deck = new Deck();
             List<Card> fullDeck = deck.CreateDeck();
             List<int> scores = new List<int>();
